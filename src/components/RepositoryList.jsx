@@ -1,19 +1,29 @@
 import { RepositoryItem } from "./RepositoryItem";
-
-const repository = {
-  name: 'Github list',
-  description: 'projeto de listagem de repositórios',
-  link: 'https://github.com/jeffersontk/github-explorer'
-}
+import '../styles/repositories.scss'
+import { useEffect, useState } from "react";
 
 export function RepositoryList() {
+  const [repositories, setRepositories] = useState([])
+
+  useEffect(() => {
+    console.log('vamo fazer o get dos repos')
+    fetch('https://api.github.com/users/jeffersontk/repos')
+      .then(response => response.json())
+      .then(data => setRepositories(data))
+  }, [])
+
   return (
-    <section className="respostiory-list">
+    <section className="repository-list">
       <h1>Lista de repositóros</h1>
       <ul>
-        <RepositoryItem
-          repository={repository}
-        />
+        {repositories.map(repository => {
+          return (
+            <RepositoryItem
+              key={repository.id}
+              repository={repository}
+            />
+          )
+        })}
       </ul>
     </section>
   )
